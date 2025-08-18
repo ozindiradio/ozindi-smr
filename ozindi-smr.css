@@ -1,0 +1,96 @@
+/*
+  OzInDi Styled Media Receiver (SMR) CSS
+  -------------------------------------------------
+  Paste this CSS URL in your Cast Developer Console when creating a Styled Media Receiver.
+  Asset URLs now point to your GitHub repo (raw).
+
+  Supported classes by SMR:
+  - .background : backdrop image during playback
+  - .logo       : large logo for idle state (use EITHER .logo OR .splash)
+  - .splash     : full-bleed idle image if not using .logo (optional)
+  - .watermark  : small logo during playback (typically bottom-right)
+  - .progressBar: playback progress indicator color
+*/
+
+:root {
+  --oz-accent: #00E5FF; /* Accent color for progress bar and glow */
+  --oz-bg: #0B0B0F;     /* Fallback background */
+}
+
+/* Fallback background color if images fail to load */
+html, body { background-color: var(--oz-bg); }
+
+/* Background uses a blurred, enlarged version of the logo with gradient overlay */
+.background {
+  background: center center / contain no-repeat url('https://raw.githubusercontent.com/ozindiradio/ozindi-smr/main/logo.png');
+  filter: blur(60px) brightness(0.5);
+  position: relative;
+}
+
+/* Gradient overlay for legibility */
+.background::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.8) 100%);
+  pointer-events: none;
+}
+
+/* IDLE STATE OPTION 1: Branded logo on neutral background */
+/* Use .logo OR .splash, not both. If .splash is present, SMR ignores .logo. */
+.logo {
+  background: center center / contain no-repeat url('https://raw.githubusercontent.com/ozindiradio/ozindi-smr/main/logo.png');
+  width: 60vw;  /* scalable for TVs of varying sizes */
+  max-width: 640px;
+  height: 20vh;
+  max-height: 240px;
+  opacity: 0.98;
+}
+
+/* HiDPI override for logo */
+@media (min-resolution: 2dppx) {
+  .logo {
+    background-image: url('https://raw.githubusercontent.com/ozindiradio/ozindi-smr/main/logo%402x.png');
+  }
+}
+
+/* IDLE STATE OPTION 2: Full-bleed splash image (optional)
+   If you supply a splash image later, add its URL below.
+*/
+.splash {
+  /* Example: background: center center / cover no-repeat url('https://raw.githubusercontent.com/ozindiradio/ozindi-smr/main/splash.jpg'); */
+}
+
+/* Watermark shown during playback (usually bottom-right) */
+.watermark {
+  background: center center / contain no-repeat url('https://raw.githubusercontent.com/ozindiradio/ozindi-smr/main/watermark.png');
+  width: 96px;
+  height: 96px;
+  opacity: 0.85;
+}
+
+/* HiDPI override for watermark */
+@media (min-resolution: 2dppx) {
+  .watermark {
+    background-image: url('https://raw.githubusercontent.com/ozindiradio/ozindi-smr/main/watermark%402x.png');
+  }
+}
+
+/* Playback progress bar */
+.progressBar {
+  background-color: var(--oz-accent);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.7);
+  height: 6px;
+  border-radius: 999px;
+}
+
+/* Optional: gentle animation on idle state logo */
+@keyframes ozFloat {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+.logo { animation: ozFloat 6s ease-in-out infinite; }
